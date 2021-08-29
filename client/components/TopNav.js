@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Menu } from "antd";
 import Link from "next/link";
 import {
@@ -5,30 +6,54 @@ import {
   LoginOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
+import { useIsClient } from "../hooks/isClientHook";
 
 const { Item } = Menu;
 
 const TopNav = () => {
+  const isClient = useIsClient();
+  const [current, setCurrent] = useState("");
+
+  useEffect(() => {
+    process.browser && setCurrent(window.location.pathname);
+  }, [process.browser && window.location.pathname]);
+
   return (
-    <Menu mode="horizontal">
-      <Item icon={<AppstoreOutlined />}>
-        <Link href="/">
-          <a>App</a>
-        </Link>
-      </Item>
+    <>
+      {isClient && (
+        <Menu mode="horizontal" selectedKeys={[current]}>
+          <Item
+            key="/"
+            onClick={(e) => setCurrent(e.key)}
+            icon={<AppstoreOutlined />}
+          >
+            <Link href="/">
+              <a>App</a>
+            </Link>
+          </Item>
 
-      <Item icon={<LoginOutlined />}>
-        <Link href="/login">
-          <a>Login</a>
-        </Link>
-      </Item>
+          <Item
+            key="/login"
+            onClick={(e) => setCurrent(e.key)}
+            icon={<LoginOutlined />}
+          >
+            <Link href="/login">
+              <a>Login</a>
+            </Link>
+          </Item>
 
-      <Item icon={<UserAddOutlined />}>
-        <Link href="/register">
-          <a>Register</a>
-        </Link>
-      </Item>
-    </Menu>
+          <Item
+            key="/register"
+            onClick={(e) => setCurrent(e.key)}
+            icon={<UserAddOutlined />}
+          >
+            <Link href="/register">
+              <a>Register</a>
+            </Link>
+          </Item>
+        </Menu>
+      )}
+    </>
   );
 };
 
