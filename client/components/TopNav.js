@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useIsClient } from "../hooks/isClientHook";
 import {
   AppstoreOutlined,
+  CoffeeOutlined,
   LoginOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
@@ -19,6 +20,7 @@ const TopNav = () => {
   const isClient = useIsClient();
   const [current, setCurrent] = useState("");
   const { state, dispatch } = useContext(Context);
+  const { user } = state;
 
   const router = useRouter();
 
@@ -48,33 +50,42 @@ const TopNav = () => {
             </Link>
           </Item>
 
-          <Item
-            key="/login"
-            onClick={(e) => setCurrent(e.key)}
-            icon={<LoginOutlined />}
-          >
-            <Link href="/login">
-              <a>Login</a>
-            </Link>
-          </Item>
+          {user === null && (
+            <>
+              <Item
+                key="/login"
+                onClick={(e) => setCurrent(e.key)}
+                icon={<LoginOutlined />}
+              >
+                <Link href="/login">
+                  <a>Login</a>
+                </Link>
+              </Item>
 
-          <Item
-            key="/register"
-            onClick={(e) => setCurrent(e.key)}
-            icon={<UserAddOutlined />}
-          >
-            <Link href="/register">
-              <a>Register</a>
-            </Link>
-          </Item>
+              <Item
+                key="/register"
+                onClick={(e) => setCurrent(e.key)}
+                icon={<UserAddOutlined />}
+              >
+                <Link href="/register">
+                  <a>Register</a>
+                </Link>
+              </Item>
+            </>
+          )}
 
-          <Item
-            key="/register"
-            onClick={(e) => setCurrent(e.key)}
-            icon={<UserAddOutlined />}
-          >
-            Logout
-          </Item>
+          {user !== null && (
+            <Menu.SubMenu
+              icon={<CoffeeOutlined />}
+              title={user && user.name}
+              className="ms-auto"
+              key="logout"
+            >
+              <Item onClick={logout} className="ms-auto" key="/logout">
+                Logout
+              </Item>
+            </Menu.SubMenu>
+          )}
         </Menu>
       )}
     </>
