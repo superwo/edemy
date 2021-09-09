@@ -81,9 +81,16 @@ const TopNav = () => {
               className="ms-auto"
               key="logout"
             >
-              <Item onClick={logout} className="ms-auto" key="/logout">
-                Logout
-              </Item>
+              <Menu.ItemGroup>
+                <Item key="/user">
+                  <Link href="/user">
+                    <a>Dashboard</a>
+                  </Link>
+                </Item>
+                <Item onClick={logout} className="ms-auto" key="/logout">
+                  Logout
+                </Item>
+              </Menu.ItemGroup>
             </Menu.SubMenu>
           )}
         </Menu>
